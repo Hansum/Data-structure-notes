@@ -15,7 +15,7 @@ typedef struct
 	List rear;
 }Queue;
 
-void enqueue(Queue *L, char elem);
+void enqueue(Queue *L, int elem);
 void dequeue(Queue *L);
 //void display(Queue *L);
 void displayFront(Queue L);
@@ -43,12 +43,12 @@ int main()
 //		display(&q);	
 //	}
 	displayFront(q);
+	displayRear(q);
 	
 	for(i = 0; i<MAX;i++)
 	{
 		dequeue(&q);	
 	}
-	displayRear(q);
 	
 	return 0;
 	
@@ -62,20 +62,19 @@ int main()
 //	}
 //}
 
-void enqueue(Queue *L, char elem)
+void enqueue(Queue *L, int elem)
 {
 	List temp;
 	temp = (List)malloc(sizeof(ctype));
 	if(temp!=NULL){
 		temp->data = elem;
 		temp->link = NULL;	
-		if(L->head ==NULL && L->rear == NULL){
-			L->head = L->rear = temp;
-			return;
+		if(L->head ==NULL){
+			L->head  = temp;
 		}else{
-			L->rear->link = temp; 
-			L->rear = temp;                                                                        
+			L->rear->link = temp;                                                                         
 		}
+		L->rear = temp;
 	}
 	
 	
@@ -84,13 +83,14 @@ void dequeue(Queue *L)
 {
 	List temp;
 	temp = L->head;
+	L->head = temp->link;
+	free(temp);	
 	if(L->head == NULL)
 	{
-		return;	
+		L->rear = NULL;	
 	}else{
 		L->head = L->head->link;
 	}
-	free(temp);	
 }
 
 void displayFront(Queue L)
