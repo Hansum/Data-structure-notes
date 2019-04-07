@@ -30,7 +30,7 @@ void displayBit(int data)
 	{
 		case 1:
 			printf("BIT PATTERN OF %d\n",data);
-			while(size>0)
+			while(size>=0)
 			{
 				temp = data >> size;
 //				printf("temp value: %d\n",temp);

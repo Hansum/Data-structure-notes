@@ -4,7 +4,7 @@
 
 typedef int SET[SIZE];
 
-void unionSort(SET A, SET B);
+void bit(SET A, SET B);
 
 
 int main()
@@ -13,11 +13,11 @@ int main()
 	SET A = {1,0,1,1,0,0,0,1};
 	//SET B = {2,6,7};
 	SET B = {0,1,0,0,0,1,1};
-	unionSort(A,B);
+	bit(A,B);
 	return 0;
 }
 
-void unionSort(SET A, SET B)
+void bit(SET A, SET B)
 {
 	SET *C, temp;
 	int i=0;
