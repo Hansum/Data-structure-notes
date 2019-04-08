@@ -11,25 +11,30 @@ void insertLast(SET *L, int elem);
 void initSet(SET *L);
 void displaySET(SET A);
 SET unionSET(SET A,SET B);
-SET intersect(SET A,SET B,SET C);
-SET difference(SET A, SET B);
+void intersect(SET A,SET B,SET *C);
+void difference(SET A, SET B, SET *D);
 int main()
 {
-	SET A,B,C,X;
+	SET A,B,C,D,X;
 	initSet(&A);
 	initSet(&B);
+	initSet(&D);
 	initSet(&X);
 	
-	insertLast(&A,2);
-	insertLast(&A,4);
+	insertLast(&A,1);
+	insertLast(&A,3);
+	insertLast(&A,5);
 	insertLast(&A,6);
-	insertLast(&A,8);
+	insertLast(&A,7);
+	insertLast(&A,9);
 	printf("SET A:\n");
 	displaySET(A);
-	insertLast(&B,1);
+	insertLast(&B,3);
+	insertLast(&B,8);
 	insertLast(&B,4);
 	insertLast(&B,5);
-	insertLast(&B,6);
+	insertLast(&B,7);
+	insertLast(&B,9);
 	printf("SET B:\n");
 	displaySET(B);
 	
@@ -38,12 +43,13 @@ int main()
 	printf("\n");
 	
 	printf("Intersect of SET A and B:\n");
-	C = intersect(A,B,X);
-	printf("Result: %d",C);
+	intersect(A,B,&X);
+	displaySET(X);
 	printf("\n");
 	
 	printf("Difference of SET A and B:\n");
-	
+	difference(A,B,&D);
+	displaySET(D);
 }
 
 SET unionSet(SET A, SET B)
@@ -73,28 +79,40 @@ SET unionSet(SET A, SET B)
 	}
 }
 
-SET intersect(SET A,SET B,SET C) 
+void intersect(SET A,SET B,SET *C) 
 {
 	SET temp,trav,trav2;
 	
 	for(trav = A;trav!=NULL;trav = trav->link)
 	{
-		for(trav2 = B;trav2!=NULL;trav2 =trav2->link)
-		{
-			temp =(SET)malloc(sizeof(ctype));
+		for(trav2 = B;trav2!=NULL;trav2 =trav2->link){
 			if(trav->elem == trav2->elem)
 			{
+				temp =(SET)malloc(sizeof(ctype));
 				temp->elem = trav->elem;
-				temp->link = C;
-				C = temp;
+				temp->link = *C;
+				*C = temp;
 			}
 		}
 	}
-	return C;
+	
 }
-SET difference(SET A, SET B)
+void difference(SET A, SET B,SET *D)
 {
-	SET temp,trav;
+	SET temp,trav,trav2;
+	
+	for(trav = A;trav!=NULL;trav = trav->link)
+	{
+		for(trav2 = B;trav2!=NULL && trav->elem != trav2->elem;trav2 =trav2->link){}
+		
+		if(trav2 ==NULL)
+		{
+			temp = (SET)malloc(sizeof(ctype));
+			temp->elem = trav->elem;
+			temp->link = *D;
+			*D = temp;
+		}
+	}
 }
 
 void initSet(SET *L)
