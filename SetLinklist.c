@@ -10,16 +10,17 @@ typedef struct cell{
 void insertLast(SET *L, int elem);
 void initSet(SET *L);
 void displaySET(SET A);
-SET unionSET(SET A,SET B);
+void unionSET(SET A,SET B,SET *U);
 void intersect(SET A,SET B,SET *C);
 void difference(SET A, SET B, SET *D);
 int main()
 {
-	SET A,B,C,D,X;
+	SET A,B,C,D,U,X;
 	initSet(&A);
 	initSet(&B);
 	initSet(&D);
 	initSet(&X);
+	initSet(&U);
 	
 	insertLast(&A,1);
 	insertLast(&A,3);
@@ -39,7 +40,8 @@ int main()
 	displaySET(B);
 	
 	printf("Union of SET A and B :\n");
-	
+	unionSet(A,B,&U);
+	displaySET(U);
 	printf("\n");
 	
 	printf("Intersect of SET A and B:\n");
@@ -52,29 +54,22 @@ int main()
 	displaySET(D);
 }
 
-SET unionSet(SET A, SET B)
+void unionSet(SET A, SET B,SET *U)
 {
-	SET temp, trav,trav2;
+	SET temp, trav, trav2, travB;
 	
-	for(trav = A; trav!=NULL;)
-	{
-		for(trav2 = B;trav2!=NULL;)
-		{
+	for(trav = A;trav!=NULL;trav = trav->link){
+		for(trav2 = B;trav2!=NULL;trav2 = trav2->link){
 			temp =(SET)malloc(sizeof(ctype));
-			if(trav->elem < trav2->elem)
-			{
+			if(trav->elem != trav2->elem){
 				temp->elem = trav->elem;
-				trav2 = trav2->link;
-			}else if(trav->elem == trav2->elem){
-				trav = trav->link;
-				trav2 = trav2->link;
-			}else if(trav->elem > trav2->elem){
+			}else if(trav->elem != trav2->elem){
+				temp->elem = trav->elem;
+			}else if(trav2->elem != trav->elem){
 				temp->elem = trav2->elem;
-				trav = trav->link;
 			}
-			temp->link = NULL;
-			
-			return temp;
+			temp->link = *U;
+			*U = temp;
 		}
 	}
 }
